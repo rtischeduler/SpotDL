@@ -56,7 +56,7 @@ button.primary:hover:not(:disabled) { background:#000; color:#fff; }
 <body>
 <main>
   <h1>SpotDL</h1>
-  <div class="sub">Search a song, or paste a Spotify track, album or playlist link.</div>
+  <div class="sub">Search a song, or paste a Spotify track, album or playlist link, then press play.</div>
   <form id="form">
     <input id="q" type="text" placeholder="Song name or open.spotify.com link" autocomplete="off" autocapitalize="off" spellcheck="false">
     <button class="primary" id="go" type="submit">Search</button>
@@ -574,22 +574,6 @@ async function convert(t, status) {
   return new URL(url, SITE + "/").href;
 }
 
-async function save(url, name) {
-  const r = await px({ url, method: "GET", headers: { accept: "*/*" } });
-  if (!r.ok) throw new Error("HTTP " + r.status);
-  const blob = await r.blob();
-  if (blob.size < 1024) throw new Error("Received an empty file");
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
-}
-
-const safeName = (s) => s.replace(/[\\/:*?"<>|\u0000-\u001f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || "track";
-
 function h(tag, attrs, ...kids) {
   const e = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -606,62 +590,110 @@ const fmt = (d) => {
   return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 };
 
-function trackRow(t) {
-  const st = h("div", { class: "st" }, [t.album, fmt(t.duration)].filter(Boolean).join(" · "));
-  const dl = h("button", { class: "primary" }, "Download");
-  const row = { t, st, dl, busy: false };
-  const status = (text, cls = "") => { st.className = "st " + cls; st.textContent = text; };
-  row.status = status;
-  row.run = async () => {
-    if (row.busy) return;
-    row.busy = true; dl.disabled = true;
-    try {
-      const url = await convert(t, (s) => status(s));
-      status("Downloading…");
-      try {
-        await save(url, safeName([t.artist, t.title].filter(Boolean).join(" - ")) + ".mp3");
-        status("Downloaded", "ok");
-      } catch (e) {
-        log("[save] blob download failed", e);
-        window.open(url, "_blank");
-        status("Opened download link", "ok");
-      }
-    } catch (e) {
-      status((e && e.message) || "Failed", "err");
-    } finally { row.busy = false; dl.disabled = false; }
-  };
-  dl.addEventListener("click", row.run);
-  const prev = t.previewUrl ? h("button", {}, "Preview") : null;
-  if (prev) {
-    let audio = null;
-    prev.addEventListener("click", () => {
-      if (audio && !audio.paused) { audio.pause(); prev.textContent = "Preview"; return; }
-      document.querySelectorAll("audio").forEach((a) => a.pause());
-      audio = audio || Object.assign(new Audio(t.previewUrl), { onended: () => (prev.textContent = "Preview") });
-      audio.play().then(() => (prev.textContent = "Stop")).catch(() => status("Preview unavailable", "err"));
-    });
+const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+const player = new Audio();
+player.preload = "auto";
+let current = null, unlocked = false, autoNext = false, allRows = [];
+
+function unlock() {
+  if (unlocked) return;
+  unlocked = true;
+  try {
+    player.muted = true;
+    player.src = SILENT;
+    const p = player.play();
+    if (p && p.then) p.then(() => player.pause()).catch(() => {});
+    player.muted = false;
+  } catch {}
+}
+
+const live = () => current && current.live;
+player.addEventListener("play", () => { if (live()) current.state("playing"); });
+player.addEventListener("pause", () => { if (live() && !player.ended) current.state("paused"); });
+player.addEventListener("timeupdate", () => { if (live() && !player.paused) current.tick(player.currentTime, player.duration); });
+player.addEventListener("ended", () => {
+  if (!live()) return;
+  const done = current;
+  done.reset();
+  current = null;
+  if (autoNext) {
+    const next = allRows[allRows.indexOf(done) + 1];
+    if (next) next.play(true);
+    else autoNext = false;
   }
+});
+player.addEventListener("error", () => { if (live()) { const r = current; current = null; r.fail("Playback failed"); } });
+
+async function loadAudio(url) {
+  const r = await px({ url, method: "GET", headers: { accept: "*/*" } });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  const blob = await r.blob();
+  if (blob.size < 1024) throw new Error("Received an empty file");
+  return URL.createObjectURL(/^audio\//i.test(blob.type) ? blob : new Blob([blob], { type: "audio/mpeg" }));
+}
+
+function trackRow(t) {
+  const meta = [t.album, fmt(t.duration)].filter(Boolean).join(" · ");
+  const st = h("div", { class: "st" }, meta);
+  const btn = h("button", { class: "primary" }, "Play");
+  const row = { t, st, btn, busy: false, live: false, blobUrl: "" };
+  const status = (text, cls = "") => { st.className = "st " + cls; st.textContent = text; };
+  row.reset = () => { row.live = false; btn.textContent = "Play"; status(meta); };
+  row.fail = (msg) => { row.live = false; row.busy = false; btn.disabled = false; btn.textContent = "Play"; status(msg, "err"); };
+  row.state = (s) => { btn.textContent = s === "playing" ? "Pause" : "Play"; if (s === "paused") status("Paused"); };
+  row.tick = (now, total) => status("Playing " + fmt(now) + (total && isFinite(total) ? " / " + fmt(total) : ""), "ok");
+  row.play = async (queued = false) => {
+    if (!queued) { autoNext = false; unlock(); }
+    if (row.busy) return;
+    if (current === row && row.live) {
+      if (player.paused) player.play().catch(() => {}); else player.pause();
+      return;
+    }
+    if (current && current !== row) { player.pause(); current.reset(); }
+    current = row;
+    row.live = false;
+    row.busy = true;
+    btn.disabled = true;
+    btn.textContent = "…";
+    try {
+      if (!row.blobUrl) {
+        const url = await convert(t, (s) => status(s));
+        if (current !== row) { row.busy = false; btn.disabled = false; btn.textContent = "Play"; status("Ready"); return; }
+        status("Loading…");
+        row.blobUrl = await loadAudio(url);
+      }
+      if (current !== row) { row.reset(); return; }
+      row.live = true;
+      player.src = row.blobUrl;
+      await player.play();
+    } catch (e) {
+      if (current === row) current = null;
+      row.fail((e && e.message) || "Failed");
+      return;
+    } finally {
+      row.busy = false;
+      btn.disabled = false;
+    }
+  };
+  btn.addEventListener("click", () => row.play());
   row.el = h("div", { class: "row" },
     t.thumbnail ? h("img", { src: t.thumbnail, alt: "", referrerpolicy: "no-referrer", loading: "lazy" }) : h("img", { alt: "" }),
     h("div", { class: "t" }, h("div", { class: "ti" }, t.title), h("div", { class: "ar" }, t.artist), st),
-    h("div", { class: "btns" }, prev, dl));
+    h("div", { class: "btns" }, btn));
   return row;
 }
 
 function render(res) {
   const out = $("out");
   out.replaceChildren();
-  if (!res.items.length) { $("msg").className = ""; $("msg").textContent = "No results."; return; }
+  if (current) { player.pause(); current = null; }
+  autoNext = false;
+  if (!res.items.length) { $("msg").className = ""; $("msg").textContent = "No results."; allRows = []; return; }
   $("msg").textContent = "";
-  const rows = res.items.map(trackRow);
-  const many = res.items.length > 1;
+  const rows = allRows = res.items.map(trackRow);
   if (res.name || /album|playlist/i.test(res.type)) {
-    const all = many ? h("button", { class: "primary" }, "Download all (" + rows.length + ")") : null;
-    if (all) all.addEventListener("click", async () => {
-      all.disabled = true;
-      for (const r of rows) { await r.run(); await sleep(800); }
-      all.disabled = false;
-    });
+    const all = rows.length > 1 ? h("button", { class: "primary" }, "Play all (" + rows.length + ")") : null;
+    if (all) all.addEventListener("click", () => { unlock(); autoNext = true; rows[0].play(true); });
     out.append(h("div", { class: "head" },
       res.thumbnail ? h("img", { src: res.thumbnail, alt: "", referrerpolicy: "no-referrer" }) : null,
       h("div", { class: "t" }, h("div", { class: "k" }, res.type || "result"), h("div", { class: "n" }, res.name || "Results")),

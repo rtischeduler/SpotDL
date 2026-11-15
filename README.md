@@ -11,6 +11,6 @@ Run the `pull-spotsaver` workflow (Actions tab, Run workflow). Inputs: start pag
 A standalone page (reverse-engineered client, not a page proxy) that talks to SpotSaver's own API through Singuloxy, using the same proxy layer as `rtischeduler/DeepAI` (wisp list sync, probing, verification, automatic switching and retry).
 
 - Search a song name or paste an `open.spotify.com` track, album or playlist link: `GET /api/spotify/?q=...` or `?url=...`.
-- Download: `POST /api/get-id/` (finds the video when the result has none), then `POST /api/download/` with `format: "mp3"`. The returned file URL is fetched through the proxy and saved from the browser.
-- Albums and playlists get a "Download all" button that converts and saves one track at a time.
+- Play: `POST /api/get-id/` (finds the video when the result has none), then `POST /api/download/` with `format: "mp3"`. The returned audio is fetched through the proxy into memory and played in the page with a Play/Pause button per track. Nothing is saved to disk.
+- Albums and playlists get a "Play all" button that plays the tracks in order.
 - Every request goes through Singuloxy with a cookie jar kept in `localStorage`. If the proxy drops, a "Switch proxy" button appears.
