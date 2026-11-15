@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>SpotDL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#000; --panel:#141414; --line:rgba(255,255,255,.14); --text:#fff; --muted:rgba(255,255,255,.6); --bad:#ff5d6c; --ok:#7be495; }
+* { box-sizing:border-box; font-family:"Comfortaa",sans-serif; font-weight:bold; -webkit-tap-highlight-color:transparent; }
+html, body { margin:0; min-height:100%; background-color:var(--bg);
+  background-image:radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,255,255,.07), transparent 70%),
+    linear-gradient(to right, rgba(255,255,255,.13) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.13) 1px, transparent 1px);
+  background-size:100% 100%, 44px 44px, 44px 44px; background-attachment:fixed; color:var(--text); font-size:15px; line-height:1.5; }
+main { max-width:760px; margin:0 auto; padding:calc(24px + env(safe-area-inset-top)) 16px 80px; }
+h1 { margin:0 0 4px; font-size:28px; }
+.sub { color:var(--muted); font-size:13px; margin-bottom:18px; }
+form { display:flex; gap:8px; }
+input[type=text] { flex:1; min-width:0; background:var(--panel); color:var(--text); border:1px solid var(--line); padding:12px 14px; font-size:15px; outline:none; border-radius:0; transition:border-color .25s; }
+input[type=text]:focus { border-color:#fff; }
+button { color:var(--text); background:var(--panel); border:1px solid var(--line); border-radius:0; padding:10px 14px; font-size:14px; cursor:pointer; transition:border-color .25s, background-color .25s, color .25s; }
+button:hover:not(:disabled) { background:#fff; color:#000; border-color:#fff; }
+button:disabled { opacity:.5; cursor:default; }
+button.primary { background:#fff; color:#000; border-color:#fff; }
+button.primary:hover:not(:disabled) { background:#000; color:#fff; }
+#net { display:flex; align-items:center; gap:10px; margin:10px 0 0; color:var(--muted); font-size:12.5px; min-height:30px; flex-wrap:wrap; }
+#net .dot { width:8px; height:8px; border-radius:50%; background:var(--muted); flex:none; }
+#net.ok .dot { background:var(--ok); } #net.fail .dot { background:var(--bad); } #net.fail { color:#ffc4ca; }
+#net.busy .dot { animation:pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity:.25; } }
+#net button { padding:3px 10px; font-size:12px; }
+#msg { margin:18px 0 0; color:var(--muted); }
+#msg.err { color:#ffc4ca; }
+.head { display:flex; gap:14px; align-items:center; margin:22px 0 10px; padding:12px; border:1px solid var(--line); background:var(--panel); }
+.head img { width:72px; height:72px; object-fit:cover; flex:none; background:#000; }
+.head .t { flex:1; min-width:0; } .head .k { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em; }
+.head .n { font-size:18px; overflow-wrap:anywhere; }
+.list { display:flex; flex-direction:column; gap:6px; margin-top:12px; }
+.row { display:flex; gap:12px; align-items:center; padding:8px; border:1px solid var(--line); background:var(--panel); }
+.row img { width:52px; height:52px; object-fit:cover; flex:none; background:#000; }
+.row .t { flex:1; min-width:0; }
+.row .ti, .row .ar { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.row .ar, .row .st { color:var(--muted); font-size:12.5px; }
+.row .st.err { color:#ffc4ca; } .row .st.ok { color:var(--ok); }
+.row .btns { display:flex; gap:6px; flex:none; }
+.row .btns button { padding:7px 10px; font-size:13px; }
+@media (max-width:520px) { .row { flex-wrap:wrap; } .row .btns { width:100%; } .row .btns button { flex:1; } }
+#toast { position:fixed; left:50%; bottom:calc(18px + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:6; display:none; align-items:center; gap:10px; max-width:calc(100vw - 24px); padding:8px 12px; font-size:13px; background:var(--panel); border:1px solid var(--bad); }
+#toast.show { display:flex; } #toast button { padding:4px 10px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>SpotDL</h1>
+  <div class="sub">Search a song, or paste a Spotify track, album or playlist link.</div>
+  <form id="form">
+    <input id="q" type="text" placeholder="Song name or open.spotify.com link" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button class="primary" id="go" type="submit">Search</button>
+  </form>
+  <div id="net" class="busy"><span class="dot"></span><span id="net-text">Starting…</span><button id="net-retry" hidden>Retry</button><button id="net-switch" hidden>Switch proxy</button></div>
+  <div id="msg"></div>
+  <div id="out"></div>
+</main>
+<div id="toast"><span id="toast-text"></span><button id="toast-switch">Switch proxy</button><button id="toast-close" aria-label="Dismiss">✕</button></div>
+
+<script type="module">
+const BAD_KEY = "WB_BAD";
+const BAD_TTL_MS = 6 * 3600000;
+
+function createBadList({ storage, now = () => Date.now(), ttl = BAD_TTL_MS, key = (entry) => String(entry) } = {}) {
+  const box = () => {
+    try { return storage || globalThis.localStorage || null; } catch { return null; }
+  };
+  const read = () => {
+    const s = box();
+    if (!s) return {};
+    try {
+      const v = JSON.parse(s.getItem(BAD_KEY));
+      return v && typeof v === "object" && !Array.isArray(v) ? v : {};
+    } catch { return {}; }
+  };
+  const live = () => {
+    const t = now(), out = {};
+    for (const [k, ts] of Object.entries(read())) if (typeof ts === "number" && t - ts < ttl) out[k] = ts;
+    return out;
+  };
+  return {
+    has: (entry) => Object.hasOwn(live(), key(entry)),
+    add(entry) {
+      const s = box();
+      if (!s) return;
+      const v = live();
+      v[key(entry)] = now();
+      try { s.setItem(BAD_KEY, JSON.stringify(v)); } catch {}
+    },
+    clear() {
+      const s = box();
+      try { if (s) s.removeItem(BAD_KEY); } catch {}
+    },
+  };
+}
+
+const KSTUFF = "lotsacookie/kstuff";
+const STORAGE = "TongSherbet/storage";
+const LIST_PATH = "Assets/json/wss.json";
+const jsd = (repo) => [
+  `https://cdn.jsdelivr.net/gh/${repo}@main/`,
+  `https://fastly.jsdelivr.net/gh/${repo}@main/`,
+  `https://gcore.jsdelivr.net/gh/${repo}@main/`,
+];
+const KSTUFF_MIRRORS = [...jsd(KSTUFF), `https://raw.githubusercontent.com/${KSTUFF}/main/`, `https://cdn.statically.io/gh/${KSTUFF}/main/`];
+const STORAGE_MIRRORS = [...jsd(STORAGE), `https://raw.githubusercontent.com/${STORAGE}/main/`];
+const BUILTIN = [
+  "cdn.northstreetumc.org", "cdn.vipersfutbol.com", "cdn.pcesc.org", "cdn.kcchallengevbc.com",
+  "cdn.slcbmooc.org", "cdn.topstargym.net", "cdn.goaplytexas.org", "cdn.clearfieldswimming.com",
+  "wss://athollcottage.com/connection/", "wss://api.personalloanonline.net/ws/",
+  "wss://kristenblackburnvolleyballcamps.com/socket/", "wss://southpadreislandkiteboarding.com/socket/",
+];
+const FALLBACK = "wss://api.personalloanonline.net/ws/";
+
+const HOST_RE = /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/i;
+const WSS_RE = /^wss:\/\/[a-z0-9.-]+(:\d{1,5})?(\/[\w\-./]*)?$/i;
+const isBackup = (e) => e.includes("://");
+const toWss = (e) => {
+  e = String(e || "").trim();
+  if (!e) return null;
+  const u = isBackup(e) ? e : `wss://${e}/`;
+  return u.endsWith("/") ? u : u + "/";
+};
+const bad = createBadList({ key: toWss });
+function decodeLoaderList(src, hostRe, wssRe, max, depth = 0) {
+  if (depth > 3 || typeof src !== "string") return [];
+  let code = null;
+  try {
+    const stub = new Proxy({}, { get: () => (a) => { if (code === null && typeof a === "string") code = a; } });
+    new Function("globalThis", src)(stub);
+  } catch {}
+  if (!code) return [];
+  const arrays = code.match(/\[(?:\s*"[^"\\]{3,120}"\s*,?)+\s*\]/g) || [];
+  for (const arr of arrays) {
+    let vals;
+    try { vals = JSON.parse(arr.replace(/,\s*\]$/, "]")); } catch { continue; }
+    const out = [];
+    for (const v of vals) {
+      const value = String(v).trim();
+      if ((hostRe.test(value) || wssRe.test(value)) && !out.includes(value)) out.push(value);
+      if (out.length >= max) break;
+    }
+    if (out.length >= 3 && out.length >= vals.length * 0.6) return out;
+  }
+  return decodeLoaderList(code, hostRe, wssRe, max, depth + 1);
+}
+function parseServerList(src, decode = (s) => decodeLoaderList(s, HOST_RE, WSS_RE, 32)) {
+  if (typeof src !== "string") return [];
+  const text = src.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) => String.fromCharCode(parseInt(h, 16)));
+  const block = text.match(/serverList\s*=\s*\[([\s\S]*?)\]\s*[;,]/);
+  if (!block) return decode(src);
+  const item = /(["'])((?:\\.|(?!\1)[^\\])*)\1(\s*\.split\(\s*(?:""|'')\s*\)\s*\.reverse\(\)\s*\.join\(\s*(?:""|'')\s*\))?/g;
+  const out = [];
+  let m;
+  while ((m = item.exec(block[1]))) {
+    const value = (m[3] ? [...m[2]].reverse().join("") : m[2]).trim();
+    if ((HOST_RE.test(value) || WSS_RE.test(value)) && !out.includes(value)) out.push(value);
+    if (out.length >= 32) break;
+  }
+  return out;
+}
+function decodeInSandbox(src, ms = 4000) {
+  return new Promise((resolve) => {
+    const f = document.createElement("iframe");
+    f.sandbox = "allow-scripts";
+    f.style.display = "none";
+    const done = (v) => { clearTimeout(t); removeEventListener("message", on); f.remove(); resolve(v); };
+    const t = setTimeout(() => done([]), ms);
+    const on = (e) => { if (e.source === f.contentWindow && e.data && e.data.wbDecoded) done(e.data.list || []); };
+    addEventListener("message", on);
+    f.srcdoc = `<script>const decode=${decodeLoaderList.toString()};` +
+      `addEventListener("message",e=>{let l=[];try{l=decode(e.data.src,new RegExp(e.data.h,"i"),new RegExp(e.data.w,"i"),32)}catch{}` +
+      `parent.postMessage({wbDecoded:1,list:l},"*")});parent.postMessage({wbReady:1},"*")<\/script>`;
+    const ready = (e) => {
+      if (e.source !== f.contentWindow || !e.data || !e.data.wbReady) return;
+      removeEventListener("message", ready);
+      f.contentWindow.postMessage({ src, h: HOST_RE.source, w: WSS_RE.source }, "*");
+    };
+    addEventListener("message", ready);
+    document.body.append(f);
+  });
+}
+const parseInBrowser = async (src) => parseServerList(src, (s) => decodeInSandbox(s));
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+async function fetchWith(url, type, ms = 4000) {
+  const c = new AbortController(), t = setTimeout(() => c.abort(), ms);
+  try {
+    const r = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(), { cache: "no-store", signal: c.signal });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r[type]();
+  } finally { clearTimeout(t); }
+}
+const shuffle = (a) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const b64ToText = (b) => new TextDecoder().decode(Uint8Array.from(atob(b.trim()), (c) => c.charCodeAt(0)));
+function parseWispList(json) {
+  const b64 = Array.isArray(json) ? json.find((v) => typeof v === "string" && v.trim()) : json;
+  if (typeof b64 !== "string") return [];
+  let data;
+  try { data = JSON.parse(b64ToText(b64)); } catch { return []; }
+  const out = [];
+  (function walk(v) {
+    if (typeof v === "string" && /^wss:\/\//i.test(v.trim())) out.push(v.trim());
+    else if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === "object") Object.values(v).forEach(walk);
+  })(data);
+  return [...new Set(out)];
+}
+async function fetchWispList(mirrors = KSTUFF_MIRRORS) {
+  try { return parseWispList(await Promise.any(mirrors.map((m) => fetchWith(m + LIST_PATH, "json", 5000)))); }
+  catch { return []; }
+}
+async function syncStorageList(mirrors = STORAGE_MIRRORS) {
+  const cached = store.get("WB_SYNC");
+  const cachedList = cached && Array.isArray(cached.list) ? cached.list.filter((u) => HOST_RE.test(u) || WSS_RE.test(u)) : [];
+  if (cachedList.length && Date.now() - (cached.ts || 0) < 3600000) return cachedList;
+  const failed = store.get("WB_SYNCF");
+  if (failed && Date.now() - (failed.ts || 0) < 600000) return cachedList;
+  for (const m of mirrors) {
+    try {
+      const list = await parseInBrowser(await fetchWith(m + "loader.js", "text", 3500));
+      if (!list.length) throw new Error("no servers in loader.js");
+      store.set("WB_SYNC", { ts: Date.now(), list });
+      return list;
+    } catch (e) { console.warn("[wisp] storage sync failed:", m, e && e.message || e); }
+  }
+  store.set("WB_SYNCF", { ts: Date.now() });
+  return cachedList;
+}
+function probeWisp(entry, timeoutMs = 3000) {
+  return new Promise((resolve) => {
+    let ws;
+    try { ws = new WebSocket(toWss(entry)); } catch { return resolve(null); }
+    ws.binaryType = "arraybuffer";
+    let connected = false, sentAt = 0;
+    const streamId = (Math.floor(Math.random() * 0xFFFFFFFE) + 1) >>> 0;
+    const finish = (ping) => { clearTimeout(timer); ws.onmessage = ws.onerror = ws.onclose = null; try { ws.close(); } catch {} resolve(ping); };
+    const timer = setTimeout(() => finish(null), timeoutMs);
+    ws.onmessage = (e) => {
+      if (!(e.data instanceof ArrayBuffer) || e.data.byteLength < 5) return;
+      const v = new DataView(e.data), type = v.getUint8(0), stream = v.getUint32(1, true);
+      if (!connected) {
+        if (type === 5 && stream === 0) ws.send(new Uint8Array([5, 0, 0, 0, 0, 2, 1]));
+        else if (type === 3 && stream === 0) {
+          connected = true;
+          const host = new TextEncoder().encode("127.0.0.1");
+          const buf = new ArrayBuffer(8 + host.length), dv = new DataView(buf);
+          dv.setUint8(0, 1); dv.setUint32(1, streamId, true); dv.setUint8(5, 1); dv.setUint16(6, 69, true);
+          new Uint8Array(buf).set(host, 8);
+          sentAt = performance.now();
+          ws.send(buf);
+        }
+        return;
+      }
+      if (stream === streamId) finish(Math.round(performance.now() - sentAt));
+    };
+    ws.onerror = ws.onclose = () => finish(null);
+  });
+}
+
+async function firstAlive(entries, say, label, waveSize = 6) {
+  const alive = [];
+  for (let i = 0; i < entries.length && !alive.length; i += waveSize) {
+    const wave = entries.slice(i, i + waveSize);
+    say(`${label} (${Math.min(i + waveSize, entries.length)}/${entries.length})…`);
+    const pings = await Promise.all(wave.map((e) => probeWisp(e)));
+    wave.forEach((e, j) => { if (pings[j] !== null) alive.push({ entry: e, ping: pings[j] }); });
+  }
+  return alive.sort((a, b) => a.ping - b.ping)[0] || null;
+}
+function provisionalWisp(network) {
+  const last = store.get("WB_LAST");
+  const url = toWss(last && last.entry && !bad.has(last.entry) ? last.entry : FALLBACK);
+  network.set_websocket(url);
+  return url;
+}
+async function pickWisp(network, say = () => {}, opts = {}) {
+  const budgetMs = opts.budgetMs || 15000;
+  const excluded = new Set((opts.exclude || []).map(toWss));
+  const allowed = (entry) => !excluded.has(toWss(entry));
+  const prefer = (list) => {
+    const ok = list.filter(allowed);
+    return [...ok.filter((e) => !bad.has(e)), ...ok.filter((e) => bad.has(e))];
+  };
+  const apply = (entry) => {
+    const url = toWss(entry);
+    network.set_websocket(url);
+    try { network.set_wisp_pool([url]); } catch {}
+    store.set("WB_LAST", { entry, ts: Date.now() });
+    return url;
+  };
+  const search = async () => {
+    const last = store.get("WB_LAST");
+    if (last && last.entry && allowed(last.entry) && !bad.has(last.entry) && Date.now() - last.ts < 600000 && (await probeWisp(last.entry)) !== null) return apply(last.entry);
+
+    say("Syncing wisp list…");
+    const synced = await syncStorageList(opts.storageBases ? [...opts.storageBases, ...STORAGE_MIRRORS.filter((m) => !opts.storageBases.includes(m))] : STORAGE_MIRRORS);
+    const all = prefer([...new Set([...synced, ...BUILTIN])]);
+    const primary = all.filter((e) => !isBackup(e));
+    const hit = await firstAlive(primary, say, "Testing wisp servers");
+    if (hit) return apply(hit.entry);
+
+    say("Trying backup wisps…");
+    const remote = await fetchWispList(opts.kstuffBases ? [...opts.kstuffBases, ...KSTUFF_MIRRORS.filter((m) => !opts.kstuffBases.includes(m))] : KSTUFF_MIRRORS);
+    const backups = prefer([...new Set([...all.filter(isBackup), FALLBACK, ...shuffle(remote.filter((u) => !all.includes(u))).slice(0, 16)])]);
+    const bhit = await firstAlive(backups, say, "Testing backup wisps");
+    if (bhit) return apply(bhit.entry);
+    return null;
+  };
+  const timeout = new Promise((r) => setTimeout(() => r(null), budgetMs));
+  try {
+    const url = await Promise.race([search(), timeout]);
+    if (url) return url;
+  } catch (e) { console.warn("[wisp] pick failed", e); }
+  console.warn("[wisp] no wisp validated, using fallback");
+  return apply([FALLBACK, ...BUILTIN.filter(isBackup)].find(allowed) || FALLBACK);
+}
+
+const DIST = "dist/sandstone.mjs";
+const BASES = [
+  "https://cdn.jsdelivr.net/gh/lotsacookie/Singuloxy@main/",
+  "https://fastly.jsdelivr.net/gh/lotsacookie/Singuloxy@main/",
+];
+
+const withTimeout = (p, ms, label) => { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error(label + " timed out")), ms); })]).finally(() => clearTimeout(t)); };
+
+async function loadSandstone(log) {
+  try { return await Promise.any(BASES.map((b) => withTimeout(import(b + DIST), 12000, "proxy script"))); }
+  catch { log("[proxy] CDN import failed, trying GitHub raw"); }
+  const r = await withTimeout(fetch("https://raw.githubusercontent.com/lotsacookie/Singuloxy/main/" + DIST), 12000, "GitHub raw");
+  const code = await r.text();
+  return import(URL.createObjectURL(new Blob([code], { type: "text/javascript" })));
+}
+
+let ready = null, state = null, rotating = null;
+async function verifyWisp(libcurl) {
+  const t0 = performance.now();
+  const r = await withTimeout(libcurl.fetch("https://spotsaver.net/robots.txt", { method: "GET", redirect: "manual" }), 10000, "proxy check");
+  await withTimeout(r.text(), 8000, "proxy check");
+  return Math.round(performance.now() - t0);
+}
+async function connectWisp(st, say, log) {
+  for (let i = 0; i < 4; i++) {
+    const wisp = await pickWisp(st.network, say, { exclude: st.tried, budgetMs: 12000 });
+    say("Checking proxy…");
+    try { const ms = await verifyWisp(st.libcurl); log("[proxy] wisp", String(wisp), ms + "ms"); st.wisp = String(wisp); return; }
+    catch (e) { log("[proxy] wisp failed check", String(wisp), (e && e.message) || e); bad.add(wisp); st.tried.push(wisp); }
+  }
+  throw new Error("No working proxy found. Reload to try again.");
+}
+function getProxy({ log = () => {}, say = () => {} } = {}) {
+  return (ready ||= (async () => {
+    const t0 = Date.now(), say2 = (t) => say(t + " (" + Math.round((Date.now() - t0) / 1000) + "s)");
+    say2("Loading proxy…");
+    const sandstone = await loadSandstone(log);
+    provisionalWisp(sandstone.network);
+    for (let i = 0; i < 150 && !sandstone.libcurl.ready; i++) await new Promise((r) => setTimeout(r, 100));
+    if (!sandstone.libcurl.ready) throw new Error("libcurl did not load");
+    state = { libcurl: sandstone.libcurl, network: sandstone.network, wisp: "", tried: [] };
+    await connectWisp(state, say2, log);
+    return state;
+  })().catch((e) => { ready = null; throw e; }));
+}
+async function rotateProxy(log = () => {}, say = () => {}) {
+  if (!state) return getProxy({ log, say });
+  if (rotating) return rotating;
+  rotating = (async () => {
+    log("[proxy] switching wisp");
+    if (state.wisp) { bad.add(state.wisp); state.tried.push(state.wisp); }
+    if (state.tried.length > 6) state.tried.length = 0;
+    await connectWisp(state, say, log);
+    return state;
+  })().finally(() => { rotating = null; });
+  return rotating;
+}
+window.__getProxy = getProxy;
+window.__rotateProxy = rotateProxy;
+
+const SITE = "https://spotsaver.net";
+const JAR_KEY = "spotdl.jar";
+const $ = (id) => document.getElementById(id);
+const log = (...a) => console.log(...a);
+
+const net = { box: $("net"), text: $("net-text"), retry: $("net-retry"), swap: $("net-switch") };
+const setNet = (cls, text, actions = false) => {
+  net.box.className = cls;
+  net.text.textContent = text;
+  net.retry.hidden = net.swap.hidden = !actions;
+};
+const say = (t) => setNet("busy", t);
+
+let jar = (() => {
+  const v = store.get(JAR_KEY);
+  return Array.isArray(v) ? v.filter((c) => c && c.name && c.domain) : [];
+})();
+const saveJar = () => store.set(JAR_KEY, jar);
+const cookieFor = (url) => {
+  const host = new URL(url).hostname;
+  return jar.filter((c) => host === c.domain || host.endsWith("." + c.domain)).map((c) => c.name + "=" + c.value).join("; ");
+};
+function setCookieLines(r) {
+  const out = [];
+  if (Array.isArray(r.raw_headers)) for (const [k, v] of r.raw_headers) if (/^set-cookie$/i.test(k)) out.push(v);
+  if (!out.length && r.headers) {
+    if (typeof r.headers.getSetCookie === "function") out.push(...r.headers.getSetCookie());
+    if (!out.length && typeof r.headers.get === "function") {
+      const v = r.headers.get("set-cookie");
+      if (v) out.push(...v.split(/,(?=\s*[^;,=\s]+=)/));
+    }
+  }
+  return out;
+}
+function absorb(url, r) {
+  const lines = setCookieLines(r);
+  if (!lines.length) return;
+  const host = new URL(url).hostname;
+  for (const line of lines) {
+    const parts = line.split(";").map((p) => p.trim());
+    const eq = parts[0].indexOf("=");
+    if (eq < 1) continue;
+    const name = parts[0].slice(0, eq), value = parts[0].slice(eq + 1);
+    let domain = host, expired = false;
+    for (const p of parts.slice(1)) {
+      const i = p.indexOf("=");
+      const k = (i < 0 ? p : p.slice(0, i)).toLowerCase(), v = i < 0 ? "" : p.slice(i + 1);
+      if (k === "domain" && v) domain = v.replace(/^\./, "").toLowerCase();
+      if (k === "max-age" && Number(v) <= 0) expired = true;
+      if (k === "expires" && Date.parse(v) < Date.now()) expired = true;
+    }
+    const idx = jar.findIndex((c) => c.name === name && c.domain === domain);
+    if (idx >= 0) jar.splice(idx, 1);
+    if (!expired && value) jar.push({ name, value, domain });
+  }
+  saveJar();
+}
+
+const toast = (() => {
+  let t = 0;
+  return (text) => {
+    $("toast-text").textContent = text;
+    $("toast").classList.add("show");
+    clearTimeout(t);
+    t = setTimeout(() => $("toast").classList.remove("show"), 12000);
+  };
+})();
+
+const isRead = (m) => /^(GET|HEAD)$/i.test(m);
+const OWN_RE = /(^|\.)spotsaver\.net$/i;
+
+async function px({ url, method = "GET", headers = {}, body }) {
+  const u = new URL(url, SITE + "/");
+  if (!/^https?:$/.test(u.protocol)) throw new TypeError("Unsupported URL " + url);
+  method = String(method).toUpperCase();
+  const once = async () => {
+    const { libcurl } = await getProxy({ log, say });
+    const h = { ...headers };
+    if (OWN_RE.test(u.hostname)) {
+      h["User-Agent"] = navigator.userAgent;
+      h.Origin = SITE;
+      h.Referer = SITE + "/";
+      const ck = cookieFor(u.href);
+      if (ck) h.Cookie = ck;
+    }
+    const init = { method, headers: h, redirect: "follow" };
+    if (body != null && !isRead(method)) init.body = body;
+    const r = await withTimeout(libcurl.fetch(u.href, init), isRead(method) ? 45000 : 120000, "Request");
+    absorb(u.href, r);
+    return r;
+  };
+  try {
+    return await once();
+  } catch (e) {
+    const m = String((e && e.message) || e);
+    const netErr = /error code (6|7|28|35|52|55|56)\b|timed out|websocket|wisp/i.test(m);
+    const safe = isRead(method) || /error code (6|7|35)\b/.test(m);
+    if (netErr && safe) {
+      log("[proxy] request failed (" + m + "), switching proxy and retrying once");
+      try {
+        await rotateProxy(log, say);
+        setNet("ok", "Proxy ready");
+        return await once();
+      } catch (e2) { toast("Proxy connection failed."); throw e2; }
+    }
+    if (netErr) toast("Proxy connection failed.");
+    throw e;
+  }
+}
+
+async function api(path, { method = "GET", body } = {}) {
+  const headers = { accept: "application/json, text/plain, */*" };
+  if (body !== undefined) headers["content-type"] = "application/json";
+  const r = await px({ url: SITE + path, method, headers, body: body !== undefined ? JSON.stringify(body) : undefined });
+  const text = await withTimeout(r.text(), 60000, "Response");
+  let data = null;
+  try { data = JSON.parse(text); } catch {}
+  return { status: r.status, ok: r.ok, data, text };
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+async function retrying(fn, tries = 3) {
+  let last;
+  for (let n = 0; n < tries; n++) {
+    try {
+      last = await fn();
+      if (last.status !== 429 && last.status !== 504) return last;
+    } catch (e) { if (n === tries - 1) throw e; }
+    await sleep(2000 * (n + 1));
+  }
+  return last;
+}
+
+const artistText = (a) => Array.isArray(a) ? a.map((x) => (x && (x.name || x)) || "").filter(Boolean).join(", ") : String(a || "");
+function normTrack(t, i) {
+  return {
+    id: String(t.id || t.spotifyId || t.videoId || "t" + i),
+    title: String(t.title || t.name || "Untitled"),
+    artist: artistText(t.artist ?? t.artists),
+    album: typeof t.album === "string" ? t.album : (t.album && t.album.name) || "",
+    thumbnail: t.thumbnail || t.image || t.cover || t.albumArt || "",
+    duration: t.duration,
+    previewUrl: t.previewUrl || t.preview_url || "",
+    videoId: t.videoId || "",
+    candidateIds: Array.isArray(t.candidateIds) ? t.candidateIds : [],
+  };
+}
+function normResult(d) {
+  if (!d || typeof d !== "object") return { type: "", name: "", thumbnail: "", items: [] };
+  const list = Array.isArray(d) ? d : d.items || d.tracks || d.results || (d.track ? [d.track] : d.title || d.name ? [d] : []);
+  return {
+    type: String(d.type || ""),
+    name: String(d.name || (list.length > 1 ? d.title : "") || ""),
+    thumbnail: d.thumbnail || d.image || d.cover || "",
+    items: list.filter((t) => t && typeof t === "object").map(normTrack),
+  };
+}
+window.__normResult = normResult;
+
+async function searchSpotify(q) {
+  const param = /open\.spotify\.com/i.test(q) ? "url=" + encodeURIComponent(q) : "q=" + encodeURIComponent(q);
+  const r = await api("/api/spotify/?" + param);
+  if (!r.data) throw new Error(/just a moment|challenge/i.test(r.text) ? "SpotSaver asked for a browser check (HTTP " + r.status + ")" : "Unexpected response (HTTP " + r.status + ")");
+  if (r.data.error) throw new Error(String(r.data.error));
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return normResult(r.data);
+}
+
+async function convert(t, status) {
+  let videoId = t.videoId, ids = t.candidateIds || [];
+  if (!videoId) {
+    status("Matching…");
+    const g = await retrying(() => api("/api/get-id/", { method: "POST", body: { title: t.title, artist: t.artist, duration: t.duration } }));
+    if (g.data && g.data.success && g.data.videoId) { videoId = g.data.videoId; ids = g.data.candidateIds || []; }
+    t.videoId = videoId || ""; t.candidateIds = ids;
+  }
+  if (!videoId) throw new Error("No match found");
+  status("Converting…");
+  const d = await retrying(() => api("/api/download/", { method: "POST", body: { videoId, candidateIds: ids, format: "mp3", title: t.title, licenseKey: null } }));
+  if (d.status === 429) throw new Error("Rate limited, try again later");
+  const j = d.data || {};
+  const url = j.downloadUrl || j.url || j.fileUrl || j.mediaUrl;
+  if (!d.ok || j.error || !url) throw new Error(String(j.error || "Failed to start conversion"));
+  return new URL(url, SITE + "/").href;
+}
+
+async function save(url, name) {
+  const r = await px({ url, method: "GET", headers: { accept: "*/*" } });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  const blob = await r.blob();
+  if (blob.size < 1024) throw new Error("Received an empty file");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
+const safeName = (s) => s.replace(/[\\/:*?"<>|\u0000-\u001f]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || "track";
+
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v; else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const kid of kids.flat()) if (kid != null) e.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  return e;
+}
+const fmt = (d) => {
+  const n = Number(d);
+  if (!isFinite(n) || n <= 0) return "";
+  const s = n > 10000 ? Math.round(n / 1000) : Math.round(n);
+  return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+};
+
+function trackRow(t) {
+  const st = h("div", { class: "st" }, [t.album, fmt(t.duration)].filter(Boolean).join(" · "));
+  const dl = h("button", { class: "primary" }, "Download");
+  const row = { t, st, dl, busy: false };
+  const status = (text, cls = "") => { st.className = "st " + cls; st.textContent = text; };
+  row.status = status;
+  row.run = async () => {
+    if (row.busy) return;
+    row.busy = true; dl.disabled = true;
+    try {
+      const url = await convert(t, (s) => status(s));
+      status("Downloading…");
+      try {
+        await save(url, safeName([t.artist, t.title].filter(Boolean).join(" - ")) + ".mp3");
+        status("Downloaded", "ok");
+      } catch (e) {
+        log("[save] blob download failed", e);
+        window.open(url, "_blank");
+        status("Opened download link", "ok");
+      }
+    } catch (e) {
+      status((e && e.message) || "Failed", "err");
+    } finally { row.busy = false; dl.disabled = false; }
+  };
+  dl.addEventListener("click", row.run);
+  const prev = t.previewUrl ? h("button", {}, "Preview") : null;
+  if (prev) {
+    let audio = null;
+    prev.addEventListener("click", () => {
+      if (audio && !audio.paused) { audio.pause(); prev.textContent = "Preview"; return; }
+      document.querySelectorAll("audio").forEach((a) => a.pause());
+      audio = audio || Object.assign(new Audio(t.previewUrl), { onended: () => (prev.textContent = "Preview") });
+      audio.play().then(() => (prev.textContent = "Stop")).catch(() => status("Preview unavailable", "err"));
+    });
+  }
+  row.el = h("div", { class: "row" },
+    t.thumbnail ? h("img", { src: t.thumbnail, alt: "", referrerpolicy: "no-referrer", loading: "lazy" }) : h("img", { alt: "" }),
+    h("div", { class: "t" }, h("div", { class: "ti" }, t.title), h("div", { class: "ar" }, t.artist), st),
+    h("div", { class: "btns" }, prev, dl));
+  return row;
+}
+
+function render(res) {
+  const out = $("out");
+  out.replaceChildren();
+  if (!res.items.length) { $("msg").className = ""; $("msg").textContent = "No results."; return; }
+  $("msg").textContent = "";
+  const rows = res.items.map(trackRow);
+  const many = res.items.length > 1;
+  if (res.name || /album|playlist/i.test(res.type)) {
+    const all = many ? h("button", { class: "primary" }, "Download all (" + rows.length + ")") : null;
+    if (all) all.addEventListener("click", async () => {
+      all.disabled = true;
+      for (const r of rows) { await r.run(); await sleep(800); }
+      all.disabled = false;
+    });
+    out.append(h("div", { class: "head" },
+      res.thumbnail ? h("img", { src: res.thumbnail, alt: "", referrerpolicy: "no-referrer" }) : null,
+      h("div", { class: "t" }, h("div", { class: "k" }, res.type || "result"), h("div", { class: "n" }, res.name || "Results")),
+      all));
+  }
+  out.append(h("div", { class: "list" }, rows.map((r) => r.el)));
+}
+
+let searching = false;
+$("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const q = $("q").value.trim();
+  if (!q || searching) return;
+  searching = true; $("go").disabled = true;
+  $("out").replaceChildren();
+  $("msg").className = ""; $("msg").textContent = "Searching…";
+  try {
+    render(await searchSpotify(q));
+  } catch (err) {
+    $("msg").className = "err";
+    $("msg").textContent = (err && err.message) || "Search failed";
+  } finally { searching = false; $("go").disabled = false; }
+});
+
+async function boot() {
+  setNet("busy", "Starting…");
+  try {
+    await getProxy({ log, say });
+    setNet("ok", "Proxy ready");
+  } catch (e) {
+    setNet("fail", "Proxy failed: " + ((e && e.message) || e), true);
+  }
+}
+net.retry.addEventListener("click", boot);
+const doSwitch = async () => {
+  setNet("busy", "Switching proxy…");
+  try { await rotateProxy(log, say); setNet("ok", "Proxy ready"); } catch (e) { setNet("fail", "Proxy failed: " + ((e && e.message) || e), true); }
+};
+net.swap.addEventListener("click", doSwitch);
+$("toast-switch").addEventListener("click", () => { $("toast").classList.remove("show"); doSwitch(); });
+$("toast-close").addEventListener("click", () => $("toast").classList.remove("show"));
+
+try { new URLSearchParams(location.search).get("q") && ($("q").value = new URLSearchParams(location.search).get("q")); } catch {}
+boot();
+</script>
+</body>
+</html>
