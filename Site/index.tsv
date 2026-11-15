@@ -1,0 +1,261 @@
+depth	status	content_type	size_or_server	url	found_in
+2	skipped			http://n	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js
+2	skipped			http://www.w3.org/1998/Math/MathML	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js
+2	skipped			http://www.w3.org/1999/xlink	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js
+1	skipped			http://www.w3.org/2000/svg	https://spotsaver.net/
+2	skipped			http://www.w3.org/XML/1998/namespace	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js
+2	skipped			https://a	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js
+2	skipped			https://a/c%20d?a=1&c=3	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js
+2	skipped			https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent	https://spotsaver.net/_next/static/chunks/1h_-x_64dd3ew.js
+2	skipped			https://github.com/zloirock/core-js	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js
+2	skipped			https://github.com/zloirock/core-js/blob/v3.38.1/LICENSE	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js
+3	skipped			https://hai8g.com/4/11807048	https://spotsaver.net/_next/static/chunks/0vnnz7v1q3b53.js
+3	skipped			https://i.scdn.co	https://spotsaver.net/_next/static/chunks/0vnnz7v1q3b53.js
+2	skipped			https://nextjs.org/docs/app/api-reference/functions/cookies#options	https://spotsaver.net/_next/static/chunks/29lrohnrvwxy-.js
+2	skipped			https://nextjs.org/docs/app/api-reference/functions/headers	https://spotsaver.net/_next/static/chunks/29lrohnrvwxy-.js
+2	skipped			https://nextjs.org/docs/app/api-reference/functions/use-search-params#updating-searchparams	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/app/building-your-application/rendering/static-and-dynamic#dynamic-rendering	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/404-get-initial-props	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/blocking-route	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/dynamic-server-error	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/failed-to-find-server-action	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/gssp-component-member	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/gssp-export	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/invalid-images-config	https://spotsaver.net/_next/static/chunks/3hp3wii3osub7.js
+2	skipped			https://nextjs.org/docs/messages/next-dynamic-api-wrong-context	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/next-image-missing-loader	https://spotsaver.net/_next/static/chunks/3hp3wii3osub7.js
+2	skipped			https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns	https://spotsaver.net/_next/static/chunks/3hp3wii3osub7.js
+2	skipped			https://nextjs.org/docs/messages/next-prerender-dynamic-metadata	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/next-prerender-dynamic-viewport	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/next-request-in-use-cache	https://spotsaver.net/_next/static/chunks/29lrohnrvwxy-.js
+2	skipped			https://nextjs.org/docs/messages/non-standard-node-env	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/ppr-caught-error	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js
+2	skipped			https://nextjs.org/docs/messages/public-next-folder-conflict	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/ssg-fallback-true-export	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js
+2	skipped			https://nextjs.org/docs/messages/sync-dynamic-apis	https://spotsaver.net/_next/static/chunks/29lrohnrvwxy-.js
+2	skipped			https://pb.ytmp3tube.com/api/event	https://spotsaver.net/_next/static/chunks/1yhjnag1he7ku.js
+2	skipped			https://plausible.io/api/event	https://spotsaver.net/_next/static/chunks/1yhjnag1he7ku.js
+2	skipped			https://policies.google.com/technologies/ads	https://spotsaver.net/privacy/
+2	skipped			https://react.dev/errors/	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js
+1	skipped			https://schema.org	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net	https://spotsaver.net/
+0	200	text/html	cloudflare	https://spotsaver.net/	
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Ffeature1.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Ffeature2.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Ffeature3.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Ffeature4.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Fstep1.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Fstep2.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+1	400		cloudflare	https://spotsaver.net/_next/image/?url=%2Fimages%2Fstep3.webp&amp;w=3840&amp;q=75	https://spotsaver.net/
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/$%7Be%7D	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/$%7Bl%7D	https://spotsaver.net/_next/static/chunks/3hp3wii3osub7.js
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/$%7Bt%7D	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/02schfxn8oe2j.js	https://spotsaver.net/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js	https://spotsaver.net/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/0vnnz7v1q3b53.js	https://spotsaver.net/results/?q={search_term_string}
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/1_-ucn-et_5om.js	https://spotsaver.net/contact/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/1h_-x_64dd3ew.js	https://spotsaver.net/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/1lmmv77n1up60.js	https://spotsaver.net/
+1	200	text/css	cloudflare	https://spotsaver.net/_next/static/chunks/1qf-6keah2j6v.css	https://spotsaver.net/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/1yhjnag1he7ku.js	https://spotsaver.net/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/21uv9vyxtm56_.js	https://spotsaver.net/results/?q={search_term_string}
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/29lrohnrvwxy-.js	https://spotsaver.net/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/2ffmi-e1_atey.js	https://spotsaver.net/spotify-track-downloader/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/2ievd5lq10__a.js	https://spotsaver.net/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/2m-bv3mhwytqr.js	https://spotsaver.net/faq/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/2nj7ffv4ms4lt.js	https://spotsaver.net/spotify-to-mp3/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/3hfgzdvia0sgq.js	https://spotsaver.net/spotify-playlist-downloader/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/3hp3wii3osub7.js	https://spotsaver.net/
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/3z7m45brkp9hz.js	https://spotsaver.net/results/?q={search_term_string}
+2	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/44efin1eiqfzu.js	https://spotsaver.net/spotify-album-downloader/
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/44nld91m1sjwp.js	https://spotsaver.net/
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/static/chunks/02schfxn8oe2j.js	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/static/chunks/1lmmv77n1up60.js	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/static/chunks/2ievd5lq10__a.js	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+2	404	text/plain	cloudflare	https://spotsaver.net/_next/static/chunks/static/chunks/44nld91m1sjwp.js	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js
+1	200	application/javascript	cloudflare	https://spotsaver.net/_next/static/chunks/turbopack-449e8_-wiqbf6.js	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/ar/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ar/faq/	https://spotsaver.net/ar/
+2	200	text/html	cloudflare	https://spotsaver.net/ar/spotify-album-downloader/	https://spotsaver.net/ar/
+2	200	text/html	cloudflare	https://spotsaver.net/ar/spotify-playlist-downloader/	https://spotsaver.net/ar/
+2	200	text/html	cloudflare	https://spotsaver.net/ar/spotify-to-mp3/	https://spotsaver.net/ar/
+2	200	text/html	cloudflare	https://spotsaver.net/ar/spotify-track-downloader/	https://spotsaver.net/ar/
+1	200	text/html	cloudflare	https://spotsaver.net/bn/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/bn/faq/	https://spotsaver.net/bn/
+2	200	text/html	cloudflare	https://spotsaver.net/bn/spotify-album-downloader/	https://spotsaver.net/bn/
+2	200	text/html	cloudflare	https://spotsaver.net/bn/spotify-playlist-downloader/	https://spotsaver.net/bn/
+2	200	text/html	cloudflare	https://spotsaver.net/bn/spotify-to-mp3/	https://spotsaver.net/bn/
+2	200	text/html	cloudflare	https://spotsaver.net/bn/spotify-track-downloader/	https://spotsaver.net/bn/
+1	200	text/html	cloudflare	https://spotsaver.net/contact/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/cs/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/cs/faq/	https://spotsaver.net/faq/
+2	200	text/html	cloudflare	https://spotsaver.net/cs/spotify-album-downloader/	https://spotsaver.net/cs/
+2	200	text/html	cloudflare	https://spotsaver.net/cs/spotify-playlist-downloader/	https://spotsaver.net/spotify-playlist-downloader/
+2	200	text/html	cloudflare	https://spotsaver.net/cs/spotify-to-mp3/	https://spotsaver.net/cs/
+2	200	text/html	cloudflare	https://spotsaver.net/cs/spotify-track-downloader/	https://spotsaver.net/spotify-track-downloader/
+1	200	text/html	cloudflare	https://spotsaver.net/de/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/de/faq/	https://spotsaver.net/de/
+2	200	text/html	cloudflare	https://spotsaver.net/de/spotify-album-downloader/	https://spotsaver.net/de/
+2	200	text/html	cloudflare	https://spotsaver.net/de/spotify-playlist-downloader/	https://spotsaver.net/de/
+2	200	text/html	cloudflare	https://spotsaver.net/de/spotify-to-mp3/	https://spotsaver.net/de/
+2	200	text/html	cloudflare	https://spotsaver.net/de/spotify-track-downloader/	https://spotsaver.net/de/
+1	200	text/html	cloudflare	https://spotsaver.net/el/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/el/faq/	https://spotsaver.net/el/
+2	200	text/html	cloudflare	https://spotsaver.net/el/spotify-album-downloader/	https://spotsaver.net/el/
+2	200	text/html	cloudflare	https://spotsaver.net/el/spotify-playlist-downloader/	https://spotsaver.net/el/
+2	200	text/html	cloudflare	https://spotsaver.net/el/spotify-to-mp3/	https://spotsaver.net/el/
+2	200	text/html	cloudflare	https://spotsaver.net/el/spotify-track-downloader/	https://spotsaver.net/el/
+1	200	text/html	cloudflare	https://spotsaver.net/es/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/es/faq/	https://spotsaver.net/es/
+2	200	text/html	cloudflare	https://spotsaver.net/es/spotify-album-downloader/	https://spotsaver.net/es/
+2	200	text/html	cloudflare	https://spotsaver.net/es/spotify-playlist-downloader/	https://spotsaver.net/es/
+2	200	text/html	cloudflare	https://spotsaver.net/es/spotify-to-mp3/	https://spotsaver.net/es/
+2	200	text/html	cloudflare	https://spotsaver.net/es/spotify-track-downloader/	https://spotsaver.net/es/
+1	200	text/html	cloudflare	https://spotsaver.net/faq/	https://spotsaver.net/
+1	200	image/x-icon	cloudflare	https://spotsaver.net/favicon.ico?favicon.27spdoc2ztc2k.ico	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/fil/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/fil/faq/	https://spotsaver.net/fil/
+2	200	text/html	cloudflare	https://spotsaver.net/fil/spotify-album-downloader/	https://spotsaver.net/fil/
+2	200	text/html	cloudflare	https://spotsaver.net/fil/spotify-playlist-downloader/	https://spotsaver.net/fil/
+2	200	text/html	cloudflare	https://spotsaver.net/fil/spotify-to-mp3/	https://spotsaver.net/fil/
+2	200	text/html	cloudflare	https://spotsaver.net/fil/spotify-track-downloader/	https://spotsaver.net/fil/
+1	200	text/html	cloudflare	https://spotsaver.net/fr/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/fr/faq/	https://spotsaver.net/fr/
+2	200	text/html	cloudflare	https://spotsaver.net/fr/spotify-album-downloader/	https://spotsaver.net/fr/
+2	200	text/html	cloudflare	https://spotsaver.net/fr/spotify-playlist-downloader/	https://spotsaver.net/fr/
+2	200	text/html	cloudflare	https://spotsaver.net/fr/spotify-to-mp3/	https://spotsaver.net/fr/
+2	200	text/html	cloudflare	https://spotsaver.net/fr/spotify-track-downloader/	https://spotsaver.net/fr/
+1	200	text/html	cloudflare	https://spotsaver.net/hi/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/hi/faq/	https://spotsaver.net/hi/
+2	200	text/html	cloudflare	https://spotsaver.net/hi/spotify-album-downloader/	https://spotsaver.net/hi/
+2	200	text/html	cloudflare	https://spotsaver.net/hi/spotify-playlist-downloader/	https://spotsaver.net/hi/
+2	200	text/html	cloudflare	https://spotsaver.net/hi/spotify-to-mp3/	https://spotsaver.net/hi/
+2	200	text/html	cloudflare	https://spotsaver.net/hi/spotify-track-downloader/	https://spotsaver.net/hi/
+1	200	text/html	cloudflare	https://spotsaver.net/id/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/id/faq/	https://spotsaver.net/id/
+2	200	text/html	cloudflare	https://spotsaver.net/id/spotify-album-downloader/	https://spotsaver.net/id/
+2	200	text/html	cloudflare	https://spotsaver.net/id/spotify-playlist-downloader/	https://spotsaver.net/id/
+2	200	text/html	cloudflare	https://spotsaver.net/id/spotify-to-mp3/	https://spotsaver.net/id/
+2	200	text/html	cloudflare	https://spotsaver.net/id/spotify-track-downloader/	https://spotsaver.net/id/
+1	206	image/webp	bytes 0-1023/98932 cloudflare	https://spotsaver.net/images/og-image.webp	https://spotsaver.net/
+1	206	image/webp	bytes 0-1023/23910 cloudflare	https://spotsaver.net/images/step1.webp	https://spotsaver.net/
+1	206	image/webp	bytes 0-1023/20718 cloudflare	https://spotsaver.net/images/step2.webp	https://spotsaver.net/
+1	206	image/webp	bytes 0-1023/20160 cloudflare	https://spotsaver.net/images/step3.webp	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/it/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/it/faq/	https://spotsaver.net/it/
+2	200	text/html	cloudflare	https://spotsaver.net/it/spotify-album-downloader/	https://spotsaver.net/it/
+2	200	text/html	cloudflare	https://spotsaver.net/it/spotify-playlist-downloader/	https://spotsaver.net/it/
+2	200	text/html	cloudflare	https://spotsaver.net/it/spotify-to-mp3/	https://spotsaver.net/it/
+2	200	text/html	cloudflare	https://spotsaver.net/it/spotify-track-downloader/	https://spotsaver.net/it/
+1	200	text/html	cloudflare	https://spotsaver.net/ja/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ja/faq/	https://spotsaver.net/ja/
+2	200	text/html	cloudflare	https://spotsaver.net/ja/spotify-album-downloader/	https://spotsaver.net/ja/
+2	200	text/html	cloudflare	https://spotsaver.net/ja/spotify-playlist-downloader/	https://spotsaver.net/ja/
+2	200	text/html	cloudflare	https://spotsaver.net/ja/spotify-to-mp3/	https://spotsaver.net/ja/
+2	200	text/html	cloudflare	https://spotsaver.net/ja/spotify-track-downloader/	https://spotsaver.net/ja/
+1	200	text/html	cloudflare	https://spotsaver.net/ko/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ko/faq/	https://spotsaver.net/ko/
+2	200	text/html	cloudflare	https://spotsaver.net/ko/spotify-album-downloader/	https://spotsaver.net/ko/
+2	200	text/html	cloudflare	https://spotsaver.net/ko/spotify-playlist-downloader/	https://spotsaver.net/ko/
+2	200	text/html	cloudflare	https://spotsaver.net/ko/spotify-to-mp3/	https://spotsaver.net/ko/
+2	200	text/html	cloudflare	https://spotsaver.net/ko/spotify-track-downloader/	https://spotsaver.net/ko/
+1	200	text/html	cloudflare	https://spotsaver.net/ms/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ms/faq/	https://spotsaver.net/ms/
+2	200	text/html	cloudflare	https://spotsaver.net/ms/spotify-album-downloader/	https://spotsaver.net/ms/
+2	200	text/html	cloudflare	https://spotsaver.net/ms/spotify-playlist-downloader/	https://spotsaver.net/ms/
+2	200	text/html	cloudflare	https://spotsaver.net/ms/spotify-to-mp3/	https://spotsaver.net/ms/
+2	200	text/html	cloudflare	https://spotsaver.net/ms/spotify-track-downloader/	https://spotsaver.net/ms/
+1	200	text/html	cloudflare	https://spotsaver.net/nl/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/nl/faq/	https://spotsaver.net/nl/
+2	200	text/html	cloudflare	https://spotsaver.net/nl/spotify-album-downloader/	https://spotsaver.net/nl/
+2	200	text/html	cloudflare	https://spotsaver.net/nl/spotify-playlist-downloader/	https://spotsaver.net/nl/
+2	200	text/html	cloudflare	https://spotsaver.net/nl/spotify-to-mp3/	https://spotsaver.net/nl/
+2	200	text/html	cloudflare	https://spotsaver.net/nl/spotify-track-downloader/	https://spotsaver.net/nl/
+1	200	text/html	cloudflare	https://spotsaver.net/pl/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/pl/faq/	https://spotsaver.net/pl/
+2	200	text/html	cloudflare	https://spotsaver.net/pl/spotify-album-downloader/	https://spotsaver.net/pl/
+2	200	text/html	cloudflare	https://spotsaver.net/pl/spotify-playlist-downloader/	https://spotsaver.net/pl/
+2	200	text/html	cloudflare	https://spotsaver.net/pl/spotify-to-mp3/	https://spotsaver.net/pl/
+2	200	text/html	cloudflare	https://spotsaver.net/pl/spotify-track-downloader/	https://spotsaver.net/pl/
+1	200	text/html	cloudflare	https://spotsaver.net/privacy/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/pt/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/pt/faq/	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/pt/spotify-album-downloader/	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/pt/spotify-playlist-downloader/	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/pt/spotify-to-mp3/	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/pt/spotify-track-downloader/	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/results/	https://spotsaver.net/results/?q={search_term_string}
+1	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ar	https://spotsaver.net/ar/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=bn	https://spotsaver.net/bn/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=cs	https://spotsaver.net/cs/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=de	https://spotsaver.net/de/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=el	https://spotsaver.net/el/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=es	https://spotsaver.net/es/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=fil	https://spotsaver.net/fil/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=fr	https://spotsaver.net/fr/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=hi	https://spotsaver.net/hi/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=id	https://spotsaver.net/id/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=it	https://spotsaver.net/it/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ja	https://spotsaver.net/ja/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ko	https://spotsaver.net/ko/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ms	https://spotsaver.net/ms/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=nl	https://spotsaver.net/nl/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=pl	https://spotsaver.net/pl/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=pt	https://spotsaver.net/pt/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ro	https://spotsaver.net/ro/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=ru	https://spotsaver.net/ru/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=th	https://spotsaver.net/th/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=tr	https://spotsaver.net/tr/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=uk	https://spotsaver.net/uk/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=vi	https://spotsaver.net/vi/
+2	200	text/html	cloudflare	https://spotsaver.net/results/?q={search_term_string}&lang=zh	https://spotsaver.net/zh/
+1	200	text/html	cloudflare	https://spotsaver.net/ro/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ro/faq/	https://spotsaver.net/ro/
+2	200	text/html	cloudflare	https://spotsaver.net/ro/spotify-album-downloader/	https://spotsaver.net/ro/
+2	200	text/html	cloudflare	https://spotsaver.net/ro/spotify-playlist-downloader/	https://spotsaver.net/ro/
+2	200	text/html	cloudflare	https://spotsaver.net/ro/spotify-to-mp3/	https://spotsaver.net/ro/
+2	200	text/html	cloudflare	https://spotsaver.net/ro/spotify-track-downloader/	https://spotsaver.net/ro/
+1	200	text/html	cloudflare	https://spotsaver.net/ru/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/ru/faq/	https://spotsaver.net/ru/
+2	200	text/html	cloudflare	https://spotsaver.net/ru/spotify-album-downloader/	https://spotsaver.net/ru/
+2	200	text/html	cloudflare	https://spotsaver.net/ru/spotify-playlist-downloader/	https://spotsaver.net/ru/
+2	200	text/html	cloudflare	https://spotsaver.net/ru/spotify-to-mp3/	https://spotsaver.net/ru/
+2	200	text/html	cloudflare	https://spotsaver.net/ru/spotify-track-downloader/	https://spotsaver.net/ru/
+1	200	text/html	cloudflare	https://spotsaver.net/spotify-album-downloader/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/spotify-playlist-downloader/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/spotify-to-mp3/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/spotify-track-downloader/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/terms/	https://spotsaver.net/
+1	200	text/html	cloudflare	https://spotsaver.net/th/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/th/faq/	https://spotsaver.net/th/
+2	200	text/html	cloudflare	https://spotsaver.net/th/spotify-album-downloader/	https://spotsaver.net/th/
+2	200	text/html	cloudflare	https://spotsaver.net/th/spotify-playlist-downloader/	https://spotsaver.net/th/
+2	200	text/html	cloudflare	https://spotsaver.net/th/spotify-to-mp3/	https://spotsaver.net/th/
+2	200	text/html	cloudflare	https://spotsaver.net/th/spotify-track-downloader/	https://spotsaver.net/th/
+1	200	text/html	cloudflare	https://spotsaver.net/tr/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/tr/faq/	https://spotsaver.net/tr/
+2	200	text/html	cloudflare	https://spotsaver.net/tr/spotify-album-downloader/	https://spotsaver.net/tr/
+2	200	text/html	cloudflare	https://spotsaver.net/tr/spotify-playlist-downloader/	https://spotsaver.net/tr/
+2	200	text/html	cloudflare	https://spotsaver.net/tr/spotify-to-mp3/	https://spotsaver.net/tr/
+2	200	text/html	cloudflare	https://spotsaver.net/tr/spotify-track-downloader/	https://spotsaver.net/tr/
+1	200	text/html	cloudflare	https://spotsaver.net/uk/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/uk/faq/	https://spotsaver.net/faq/
+2	200	text/html	cloudflare	https://spotsaver.net/uk/spotify-album-downloader/	https://spotsaver.net/uk/
+2	200	text/html	cloudflare	https://spotsaver.net/uk/spotify-playlist-downloader/	https://spotsaver.net/spotify-playlist-downloader/
+2	200	text/html	cloudflare	https://spotsaver.net/uk/spotify-to-mp3/	https://spotsaver.net/uk/
+2	200	text/html	cloudflare	https://spotsaver.net/uk/spotify-track-downloader/	https://spotsaver.net/spotify-track-downloader/
+1	200	text/html	cloudflare	https://spotsaver.net/vi/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/vi/faq/	https://spotsaver.net/vi/
+2	200	text/html	cloudflare	https://spotsaver.net/vi/spotify-album-downloader/	https://spotsaver.net/vi/
+2	200	text/html	cloudflare	https://spotsaver.net/vi/spotify-playlist-downloader/	https://spotsaver.net/vi/
+2	200	text/html	cloudflare	https://spotsaver.net/vi/spotify-to-mp3/	https://spotsaver.net/vi/
+2	200	text/html	cloudflare	https://spotsaver.net/vi/spotify-track-downloader/	https://spotsaver.net/vi/
+1	200	text/html	cloudflare	https://spotsaver.net/zh/	https://spotsaver.net/
+2	200	text/html	cloudflare	https://spotsaver.net/zh/faq/	https://spotsaver.net/zh/
+2	200	text/html	cloudflare	https://spotsaver.net/zh/spotify-album-downloader/	https://spotsaver.net/zh/
+2	200	text/html	cloudflare	https://spotsaver.net/zh/spotify-playlist-downloader/	https://spotsaver.net/zh/
+2	200	text/html	cloudflare	https://spotsaver.net/zh/spotify-to-mp3/	https://spotsaver.net/zh/
+2	200	text/html	cloudflare	https://spotsaver.net/zh/spotify-track-downloader/	https://spotsaver.net/zh/
+3	skipped			https://stuk.github.io/jszip/documentation/howto/read_zip.html	https://spotsaver.net/_next/static/chunks/0vnnz7v1q3b53.js
+2	skipped			https://x	https://spotsaver.net/_next/static/chunks/0cz1d0mv5g_q7.js
