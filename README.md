@@ -1,10 +1,10 @@
 # SpotDL
 
-Workspace for `https://spotsaver.net/`.
+Workspace for `https://spotify.downloaderize.com/en1/` (new pulls) and `https://spotsaver.net/` (in `Site`).
 
 ## Pulling the site
 
-Run the `pull-spotsaver` workflow (Actions tab, Run workflow). Inputs: start page (default `https://spotsaver.net/`), output folder (default `Site`), extra hosts to follow (cdn or api hosts). It saves every text file it can reach into `Site/files/<host>/...` and writes `Site/index.tsv` (status per URL), `Site/urls.txt` and `Site/endpoints.tsv` (API-looking strings found in scripts), then commits the result.
+Run the `pull-site` workflow (Actions tab, Run workflow). Inputs: start page (default `https://spotify.downloaderize.com/en1/`), output folder (default `Downloaderize`), extra hosts to follow (cdn or api hosts). It saves every text file it can reach into `<folder>/files/<host>/...` and writes `<folder>/index.tsv` (status per URL), `<folder>/urls.txt` and `<folder>/endpoints.tsv` (API-looking strings found in scripts), then commits the result.
 
 ## index.html
 

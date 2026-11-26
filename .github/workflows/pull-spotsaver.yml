@@ -1,15 +1,15 @@
-name: pull-spotsaver
+name: pull-site
 on:
   workflow_dispatch:
     inputs:
       start_url:
         description: Page to start pulling from
         required: true
-        default: https://spotsaver.net/
+        default: https://spotify.downloaderize.com/en1/
       out_dir:
         description: Folder in the repo for the results
         required: true
-        default: Site
+        default: Downloaderize
       extra_hosts:
         description: Extra hosts to follow, comma separated (cdn or api hosts)
         required: false
